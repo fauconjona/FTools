@@ -38,33 +38,32 @@ namespace FToolsClient
 
         public void Draw()
         {
-            float _2dX = 0.0f, _2dY = 0.0f;
+            Vector3 camCoords = API.GetGameplayCamCoord();
+            float distance = API.Vdist(this.pos.X, this.pos.Y, this.pos.Z, camCoords.X, camCoords.Y, camCoords.Z);
+            float _2dScale = ((1 / distance) * 2) * API.GetGameplayCamFov() / 20.0f;
 
-            if (API.World3dToScreen2d(this.pos.X, this.pos.Y, this.pos.Z, ref _2dX, ref  _2dY))
+            if (distance > this.maxDistance)
             {
-                Vector3 camCoords = API.GetGameplayCamCoord();
-                float distance = API.Vdist(this.pos.X, this.pos.Y, this.pos.Z, camCoords.X, camCoords.Y, camCoords.Z);
-                float _2dScale = ((1 / distance) * 2) * API.GetGameplayCamFov() / 20.0f;
-
-                if (distance > this.maxDistance)
-                {
-                    return;
-                }
-
-                //display
-                API.SetTextScale(this.scale.X * _2dScale, this.scale.Y * _2dScale);
-                API.SetTextFont(this.font);
-                API.SetTextProportional(true);
-                API.SetTextColour(this.color.R, this.color.G, this.color.B, this.color.A);
-                API.SetTextDropshadow(0, 0, 0, 0, 255);
-                API.SetTextEdge(2, 0, 0, 0, 150);
-                API.SetTextDropShadow();
-                API.SetTextOutline();
-                API.SetTextEntry("STRING");
-                API.SetTextCentre(true);
-                API.AddTextComponentString(this.text);
-                API.DrawText(_2dX, _2dY);
+                return;
             }
+
+            //display
+            API.SetTextScale(this.scale.X * _2dScale, this.scale.Y * _2dScale);
+            API.SetTextFont(this.font);
+            API.SetTextProportional(true);
+            API.SetTextColour(this.color.R, this.color.G, this.color.B, this.color.A);
+            API.SetTextDropshadow(0, 0, 0, 0, 255);
+            API.SetTextEdge(2, 0, 0, 0, 150);
+            API.SetTextDropShadow();
+            API.SetTextOutline();
+
+            API.SetDrawOrigin(this.pos.X, this.pos.Y, this.pos.Z, 0);
+
+            API.SetTextEntry("STRING");
+            API.SetTextCentre(true);
+            API.AddTextComponentString(this.text);
+            API.EndTextCommandDisplayText(0, 0);
+            API.ClearDrawOrigin();            
         }
     }
 }
