@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FToolsClient", "FToolsClient\FToolsClient.csproj", "{6132EF3D-AD5A-40BB-AEEA-E6D7461F55EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FToolsServer", "FToolsServer\FToolsServer.csproj", "{29F41E2C-1B49-4AD6-903D-6C062562A3A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FToolsShared", "FToolsShared\FToolsShared.csproj", "{1C66BBA7-E2FE-4D1F-AA6E-88D6BDF6118F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{6132EF3D-AD5A-40BB-AEEA-E6D7461F55EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6132EF3D-AD5A-40BB-AEEA-E6D7461F55EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6132EF3D-AD5A-40BB-AEEA-E6D7461F55EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29F41E2C-1B49-4AD6-903D-6C062562A3A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F41E2C-1B49-4AD6-903D-6C062562A3A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F41E2C-1B49-4AD6-903D-6C062562A3A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29F41E2C-1B49-4AD6-903D-6C062562A3A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C66BBA7-E2FE-4D1F-AA6E-88D6BDF6118F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C66BBA7-E2FE-4D1F-AA6E-88D6BDF6118F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C66BBA7-E2FE-4D1F-AA6E-88D6BDF6118F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C66BBA7-E2FE-4D1F-AA6E-88D6BDF6118F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

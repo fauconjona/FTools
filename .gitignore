@@ -1,3 +1,7 @@
-/FToolsClient/bin
-/FToolsClient/obj
-/.vs
+/src/FToolsClient/bin
+/src/FToolsClient/obj
+/src/FToolsServer/bin
+/src/FToolsServer/obj
+/src/FToolsShared/bin
+/src/FToolsShared/obj
+/src/.vs

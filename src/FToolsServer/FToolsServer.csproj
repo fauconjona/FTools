@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6132EF3D-AD5A-40BB-AEEA-E6D7461F55EF}</ProjectGuid>
+    <ProjectGuid>{29F41E2C-1B49-4AD6-903D-6C062562A3A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FToolsClient</RootNamespace>
-    <AssemblyName>FToolsClient.net</AssemblyName>
+    <RootNamespace>FToolsServer</RootNamespace>
+    <AssemblyName>FToolsServer.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core">
-      <HintPath>..\..\..\..\..\..\FiveM Client\FiveM.app\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
+      <HintPath>..\..\..\..\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,13 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventAction.cs" />
-    <Compile Include="EventActionType.cs" />
-    <Compile Include="Text3D.cs" />
-    <Compile Include="Color.cs" />
-    <Compile Include="FToolsClient.cs" />
-    <Compile Include="MarkerEvent.cs" />
+    <Compile Include="FToolsServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FToolsShared\FToolsShared.csproj">
+      <Project>{1c66bba7-e2fe-4d1f-aa6e-88d6bdf6118f}</Project>
+      <Name>FToolsShared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
