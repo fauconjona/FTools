@@ -32,7 +32,7 @@ namespace FToolsClient
             pickups = new List<CustomPickup>();
             
 
-            Exports.Add("CreateMarkerEvent", new Func<string, int, dynamic, dynamic, dynamic, float, string>(
+            Exports.Add("CreateMarkerEvent", new Func<string, int, dynamic, dynamic, dynamic, float, bool>(
             (identifier, type, pos, scale, color, maxDistance) =>
             {
                 return CreateMarkerEvent(
@@ -45,7 +45,7 @@ namespace FToolsClient
                     );
             }));
 
-            Exports.Add("CreateMarkerEventExtended", new Func<string, int, dynamic, dynamic, dynamic, float, bool, bool, bool, string>(
+            Exports.Add("CreateMarkerEventExtended", new Func<string, int, dynamic, dynamic, dynamic, float, bool, bool, bool, bool>(
             (identifier, type, pos, scale, color, maxDistance, bobUpAndDown, faceCamera, rotate) =>
             {
                 return CreateMarkerEvent(
@@ -129,6 +129,13 @@ namespace FToolsClient
                     );
             }));
 
+            Exports.Add("DeleteText3d", new Action<string>(
+            (identifier) =>
+            {
+                if (texts.ContainsKey(identifier))
+                    texts.Remove(identifier);
+            }));
+
             Exports.Add("CreateArea", new Func<string, int, dynamic, dynamic, dynamic, dynamic, bool, bool>(
             (identifier, type, data, onEnter, onExit, parameters, debug) =>
             {
@@ -143,7 +150,14 @@ namespace FToolsClient
                     );
             }));
 
-            Exports.Add("CreatePickup", new Func<dynamic, string, bool, bool, bool, int, int?, string, string, dynamic, bool>(
+            Exports.Add("DeleteArea", new Action<string>(
+            (identifier) =>
+            {
+                if (areas.ContainsKey(identifier))
+                    areas.Remove(identifier);
+            }));
+
+            Exports.Add("CreatePickup", new Func<dynamic, string, bool, bool, bool, int, int?, string, string, dynamic, int>(
             (position, model, isDynamic, onGround, deleteOnAction, eventActionType, control, helpText, callBack, parameters) =>
             {
                 EventAction action = new EventAction
@@ -175,6 +189,17 @@ namespace FToolsClient
                     deleteOnAction,
                     action
                 );
+            }));
+
+            Exports.Add("DeletePickup", new Action<int>(
+            (NetHandle) =>
+            {
+                CustomPickup pickup = pickups.SingleOrDefault(p => p.NetHandle == NetHandle);
+
+                if (pickup != null)
+                {
+                    pickup.Delete();
+                }
             }));
 
             Exports.Add("ShowNotification", new Action<string>(
@@ -275,7 +300,7 @@ namespace FToolsClient
             }
         }
 
-        private string CreateMarkerEvent(string identifier, MarkerType type, Vector3 pos, Vector3 scale, System.Drawing.Color color, float maxDistance, bool bobUpAndDown = false, bool faceCamera = false, bool rotate = false)
+        private bool CreateMarkerEvent(string identifier, MarkerType type, Vector3 pos, Vector3 scale, System.Drawing.Color color, float maxDistance, bool bobUpAndDown = false, bool faceCamera = false, bool rotate = false)
         {
             try
             {              
@@ -290,12 +315,12 @@ namespace FToolsClient
                     FaceCamera = faceCamera,
                     Rotate = rotate
                 });
-                return identifier;
+                return true;
             }
             catch (Exception Ex)
             {
                 Debug.WriteLine("Error: " + Ex);
-                return null;
+                return false;
             }
         }
 
@@ -388,7 +413,7 @@ namespace FToolsClient
             }
         }
 
-        private bool CreatePickup(Vector3 pos, Model model, bool isDynamic, bool onGround, bool deleteOnAction, EventAction action)
+        private int CreatePickup(Vector3 pos, Model model, bool isDynamic, bool onGround, bool deleteOnAction, EventAction action)
         {
             try
             {
@@ -403,12 +428,12 @@ namespace FToolsClient
                 };
                 pickup.Create();
                 pickups.Add(pickup);
-                return true;
+                return pickup.NetHandle;
             }
             catch (Exception Ex)
             {
                 Debug.WriteLine("Error: " + Ex);
-                return false;
+                return -1;
             }
         }
 
@@ -456,7 +481,7 @@ namespace FToolsClient
             {
                 return new Action<dynamic>(arg2 =>
                 {
-                    string markerIdentifier = CreateMarkerEvent(
+                    bool created = CreateMarkerEvent(
                         arg,
                         (MarkerType)arg2.Type,
                         new Vector3 { X = (float)arg2.Pos.X, Y = (float)arg2.Pos.Y, Z = (float)arg2.Pos.Z },
@@ -468,9 +493,9 @@ namespace FToolsClient
                         IsPropertyExist(arg2, "Rotate") ? (bool)arg2.Rotate : false
                     );
 
-                    if (markerIdentifier != null)
+                    if (created)
                     {
-                        state.add("markerId", markerIdentifier);
+                        state.add("markerId", arg);
                     }               
                 });
             }), new Action<dynamic>(state =>
@@ -563,7 +588,7 @@ namespace FToolsClient
                 }
             }));
 
-            addCb("add3DText", new Func<dynamic, dynamic, Action<dynamic>>((state, arg) =>
+            addCb("create3DText", new Func<dynamic, dynamic, Action<dynamic>>((state, arg) =>
             {
                 return new Action<dynamic>(arg2 =>
                 {
@@ -592,7 +617,7 @@ namespace FToolsClient
                 }
             }));
 
-            addCb("addArea", new Func<dynamic, dynamic, Action<dynamic>>((state, arg) =>
+            addCb("createArea", new Func<dynamic, dynamic, Action<dynamic>>((state, arg) =>
             {
                 return new Action<dynamic>(arg2 =>
                 {

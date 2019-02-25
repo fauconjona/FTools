@@ -111,6 +111,12 @@ namespace FToolsClient
             }
         }
 
+        public void Delete()
+        {
+            Deleted = true;
+            BaseScript.TriggerServerEvent("FTools:PickupDeleted", NetHandle);
+        }
+
         public void Load(int handle)
         {
             PickupProp = new Prop(handle);
@@ -127,8 +133,7 @@ namespace FToolsClient
                 EventAction.Draw();
                 if (EventAction.CheckPickupControl(NetHandle) && DeleteOnAction)
                 {
-                    Deleted = true;
-                    BaseScript.TriggerServerEvent("FTools:PickupDeleted", NetHandle);
+                    Delete();
                 }
             }
         }
