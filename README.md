@@ -1,6 +1,6 @@
 # FTools
 
-I have noticed some "inexperienced" people are asking how to create 3D text and marker, or try to do so, but without success. So, I decided to create this resource to help them, but also, to facilitate the experienced one. Instead of creating a new loop each time you need a 3D text or marker, with a lots of conditions inside to check the distance and a control pressed, you just need to call a function.
+I have noticed some "inexperienced" people are asking how to create 3D text and marker, or try to do so, but without success. So, I decided to create this resource to help them, but also, to facilitate experienced developers. Instead of creating a new loop each time you need a 3D text or marker, with a lot of conditions inside to check the distance and a control pressed, you just need to call a function.
 
 ## features
 
