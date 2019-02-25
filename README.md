@@ -1,4 +1,3 @@
-
 # FTools
 
 I have noticed some "inexperienced" people are asking how to create 3D text and marker, or try to do so, but without success. So, I decided to create this resource to help them, but also, to facilitate the experienced one. Instead of creating a new loop each time you need a 3D text or marker, with a lots of conditions inside to check the distance and a control pressed, you just need to call a function.
@@ -8,7 +7,7 @@ I have noticed some "inexperienced" people are asking how to create 3D text and 
  - 3D text
  - Marker, with action event
  - Area (Sphere, Circle, Box, Rectangle and Custom)
- - Pickups (Custom)
+ - Pickups
 
 #### 3D Text
 It's basically a text drawn in the wold, you can set the color, scale, position, font and max distance.
@@ -31,16 +30,20 @@ I talked about `action event`, but what is it exactly? It can be attached to a m
 *Callback doesn't work with pickups*
 
 ### Planned
-I don't know, you can ask if you have some ideas.
+I don't know, you can tell me if you have some ideas.
 
 ## How to install
-Like all resources, just need to add the folder inside your `resources` directory. Then, just add `start FTools` at the beginning of your `server.cfg`.
+
+ 1. Download or Clone the repository
+ 2. Put `FTools` in your resources folder
+ 3. Add `start FTools` at the beginning of your server.cfg
+ 4. (Optional) You can change `max_clients` in __resource.lua
 
 ## How to use
 
 You can use FTools with exports and map directive, but how to do that?
 
-You can find the full documentation here
+For more information, you can find the full documentation here
 
 ### Exports
 All features are available in `exports.FTools` or `exports["FTools"]`
@@ -59,7 +62,7 @@ exports.FTools:CreateText3D(
 )
 ```
 ### Map directive
-Another way is to use map files. You know? Like `map.lua` that you can find inside `fivem-map-hipster`, there are some `spawnpoint`, it's a map file. 
+Another way is to use map files. You know? Like `map.lua` that you can find inside `fivem-map-hipster`, it contains some `spawnpoint`, it's a map file. 
 
 *Example:*
 ```lua
