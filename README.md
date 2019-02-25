@@ -43,7 +43,7 @@ I don't know, you can tell me if you have some ideas.
 
 You can use FTools with exports and map directive, but how to do that?
 
-For more information, you can find the full documentation here
+For more information, you can find the full documentation [here](https://github.com/fauconjona/FTools/wiki)
 
 ### Exports
 All features are available in `exports.FTools` or `exports["FTools"]`
@@ -76,6 +76,6 @@ add3DText "text_id" {
 }
 ```
 
-## Suggestions
+## Contributing
 
 I tried to make it more optimized as possible, but if you have any suggestion, you can tell me. 
