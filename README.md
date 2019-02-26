@@ -66,7 +66,7 @@ Another way is to use map files. You know? Like `map.lua` that you can find insi
 
 *Example:*
 ```lua
-add3DText "text_id" {
+create3DText "text_id" {
 	Text = "Hello World",
 	Font = 0,
 	Color = { R = 255, G = 255, B = 255 },
