@@ -1,6 +1,6 @@
 # FTools
 
-I have noticed some "inexperienced" people are asking how to create 3D text and marker, or try to do so, but without success. So, I decided to create this resource to help them, but also, to facilitate the experienced one. Instead of creating a new loop each time you need a 3D text or marker, with a lots of conditions inside to check the distance and a control pressed, you just need to call a function.
+I have noticed some "inexperienced" people are asking how to create 3D text and marker, or try to do so, but without success. So, I decided to create this resource to help them, but also, to facilitate experienced developers. Instead of creating a new loop each time you need a 3D text or marker, with a lot of conditions inside to check the distance and a control pressed, you just need to call a function.
 
 ## features
 
@@ -43,7 +43,7 @@ I don't know, you can tell me if you have some ideas.
 
 You can use FTools with exports and map directive, but how to do that?
 
-For more information, you can find the full documentation here
+For more information, you can find the full documentation [here](https://github.com/fauconjona/FTools/wiki)
 
 ### Exports
 All features are available in `exports.FTools` or `exports["FTools"]`
@@ -66,7 +66,7 @@ Another way is to use map files. You know? Like `map.lua` that you can find insi
 
 *Example:*
 ```lua
-add3DText "text_id" {
+create3DText "text_id" {
 	Text = "Hello World",
 	Font = 0,
 	Color = { R = 255, G = 255, B = 255 },
@@ -76,6 +76,6 @@ add3DText "text_id" {
 }
 ```
 
-## Suggestions
+## Contributing
 
 I tried to make it more optimized as possible, but if you have any suggestion, you can tell me. 
