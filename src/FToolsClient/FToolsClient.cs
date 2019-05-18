@@ -64,8 +64,9 @@ namespace FToolsClient
             Exports.Add("DeleteMarkerEvent", new Action<string>(
             (identifier) =>
             {
-                if (markerEvents.ContainsKey(identifier))
+                if (identifier != null && markerEvents.ContainsKey(identifier))
                     markerEvents.Remove(identifier);
+
             }));
             
             Exports.Add("AddTextToMarkerEvent", new Func<string, string, int, dynamic, dynamic, dynamic, float, bool>(
@@ -132,7 +133,7 @@ namespace FToolsClient
             Exports.Add("DeleteText3d", new Action<string>(
             (identifier) =>
             {
-                if (texts.ContainsKey(identifier))
+                if (identifier != null && texts.ContainsKey(identifier))
                     texts.Remove(identifier);
             }));
 
@@ -150,10 +151,99 @@ namespace FToolsClient
                     );
             }));
 
+            Exports.Add("IsEntityInArea", new Func<string, int, bool>(
+            (identifier, handle) =>
+            {
+                if (identifier != null && areas.ContainsKey(identifier))
+                {
+                    Entity entity = Entity.FromHandle(handle);
+                    AreaBase area = areas[identifier];
+                    return area.CoordsInside(entity.Position);
+                }
+                return false;
+            }));
+
+            Exports.Add("IsCoordsInArea", new Func<string, float, float, float, bool>(
+            (identifier, x, y, z) =>
+            {
+                if (identifier != null && areas.ContainsKey(identifier))
+                {
+                    AreaBase area = areas[identifier];
+                    return area.CoordsInside(new Vector3 { X = x, Y = y, Z = z });
+                }
+                return false;
+            }));
+
+            Exports.Add("GetFirstAreaEntityIsIn", new Func<int, string>(
+            (handle) =>
+            {
+                Entity entity = Entity.FromHandle(handle);
+                
+                foreach(KeyValuePair<string, AreaBase> pair in areas)
+                {
+                    if (pair.Value.CoordsInside(entity.Position))
+                    {
+                        return pair.Key;
+                    }
+                }
+
+                return null;
+            }));
+
+            Exports.Add("GetFirstAreaCoordsIsIn", new Func<float, float, float, string>(
+            (x, y, z) =>
+            {
+                Vector3 coords = new Vector3 { X = x, Y = y, Z = z };
+
+                foreach (KeyValuePair<string, AreaBase> pair in areas)
+                {
+                    if (pair.Value.CoordsInside(coords))
+                    {
+                        return pair.Key;
+                    }
+                }
+
+                return null;
+            }));
+
+            Exports.Add("GetAreasEntityIsIn", new Func<int, object[]>(
+            (handle) =>
+            {
+                Entity entity = Entity.FromHandle(handle);
+                List<string> result = new List<string>();
+
+                foreach (KeyValuePair<string, AreaBase> pair in areas)
+                {
+                    if (pair.Value.CoordsInside(entity.Position))
+                    {
+                        result.Add(pair.Key);
+                    }
+                }
+
+                return result.ToArray();
+            }));
+
+            Exports.Add("GetAreasCoordsIsIn", new Func<float, float, float, object[]>(
+            (x, y, z) =>
+            {
+                Vector3 coords = new Vector3 { X = x, Y = y, Z = z };
+                List<string> result = new List<string>();
+
+                foreach (KeyValuePair<string, AreaBase> pair in areas)
+                {
+                    if (pair.Value.CoordsInside(coords))
+                    {
+                        result.Add(pair.Key);
+                    }
+                }
+
+                return result.ToArray();
+            }));
+
             Exports.Add("DeleteArea", new Action<string>(
             (identifier) =>
             {
-                if (areas.ContainsKey(identifier))
+                if (identifier != null && areas.ContainsKey(identifier))
                     areas.Remove(identifier);
             }));
 
@@ -218,27 +308,27 @@ namespace FToolsClient
 
         private async Task OnTick()
         {
-            foreach(KeyValuePair<string, MarkerEvent> marker in markerEvents)
+            foreach(MarkerEvent marker in markerEvents.Values.ToList())
             {
-                marker.Value.Draw();
-                if (marker.Value.EventAction != null && marker.Value.EventAction.Type == EventActionType.PressControl)
+                marker.Draw();
+                if (marker.EventAction != null && marker.EventAction.Type == EventActionType.PressControl)
                 {
-                    marker.Value.Check();
+                    marker.Check();
                 }
             }
 
-            foreach (KeyValuePair<string, Text3D> text in texts)
+            foreach (Text3D text in texts.Values.ToList())
             {
-                text.Value.Draw();
+                text.Draw();
             }
 
-            foreach (KeyValuePair<string, AreaBase> area in areas)
+            foreach (AreaBase area in areas.Values.ToList())
             {
-                if (area.Value.Debug)
-                    area.Value.Draw();
+                if (area.Debug)
+                    area.Draw();
             }
 
-            foreach (CustomPickup pick in pickups)
+            foreach (CustomPickup pick in pickups.ToList())
             {
                 if (pick.EventAction != null && pick.EventAction.Type == EventActionType.PressControl)
                 {
@@ -250,20 +340,20 @@ namespace FToolsClient
         private async Task OnTick500()
         {
             await Delay(500);
-            foreach (KeyValuePair<string, MarkerEvent> marker in markerEvents)
+            foreach (MarkerEvent marker in markerEvents.Values.ToList())
             {
-                if (marker.Value.EventAction == null || marker.Value.EventAction.Type != EventActionType.PressControl)
+                if (marker.EventAction == null || marker.EventAction.Type != EventActionType.PressControl)
                 {
-                    marker.Value.Check();
+                    marker.Check();
                 }
             }
 
-            foreach (KeyValuePair<string, AreaBase> area in areas)
+            foreach (AreaBase area in areas.Values.ToList())
             {
-                area.Value.Check();
+                area.Check();
             }
 
-            foreach (CustomPickup pick in pickups)
+            foreach (CustomPickup pick in pickups.ToList())
             {
                 if (pick.EventAction == null || pick.EventAction.Type != EventActionType.PressControl)
                 {
@@ -283,6 +373,9 @@ namespace FToolsClient
         {
             try
             {
+                if (identifier == null || texts.ContainsKey(identifier))
+                    return false;
+
                 texts.Add(identifier, new Text3D {
                     TextString = text,
                     Font = font,
@@ -303,7 +396,10 @@ namespace FToolsClient
         private bool CreateMarkerEvent(string identifier, MarkerType type, Vector3 pos, Vector3 scale, System.Drawing.Color color, float maxDistance, bool bobUpAndDown = false, bool faceCamera = false, bool rotate = false)
         {
             try
-            {              
+            {
+                if (identifier == null || markerEvents.ContainsKey(identifier))
+                    return false;
+
                 markerEvents.Add(identifier, new MarkerEvent {
                     Identifier = identifier,
                     Type = type,
@@ -328,6 +424,9 @@ namespace FToolsClient
         {
             try
             {
+                if (identifier == null || areas.ContainsKey(identifier))
+                    return false;
+
                 switch (type)
                 {
                     case AreaType.Sphere:
@@ -363,6 +462,7 @@ namespace FToolsClient
                             Type = type,
                             Pos1 = new Vector3 { X = (float)data.Pos1.X, Y = (float)data.Pos1.Y, Z = (float)data.Pos1.Z },
                             Pos2 = new Vector3 { X = (float)data.Pos2.X, Y = (float)data.Pos2.Y, Z = (float)data.Pos2.Z },
+                            Angle = (float)Math.PI * (float)data.Angle / 180.0f,
                             OnEnter = onEnter,
                             OnExit = onExit,
                             Params = parameters,
@@ -376,6 +476,7 @@ namespace FToolsClient
                             Type = type,
                             Pos1 = new Vector2 { X = (float)data.Pos1.X, Y = (float)data.Pos1.Y },
                             Pos2 = new Vector2 { X = (float)data.Pos2.X, Y = (float)data.Pos2.Y },
+                            Angle = (float)Math.PI * (float)data.Angle / 180.0f,
                             OnEnter = onEnter,
                             OnExit = onExit,
                             Params = parameters,
@@ -441,7 +542,7 @@ namespace FToolsClient
         {
             try
             {
-                if (markerEvents.ContainsKey(markerEventId))
+                if (markerEventId != null && markerEvents.ContainsKey(markerEventId))
                 {
                     markerEvents[markerEventId].Text3D = text;
                     return true;
@@ -460,7 +561,7 @@ namespace FToolsClient
         {
             try
             {
-                if (markerEvents.ContainsKey(markerEventId))
+                if (markerEventId != null && markerEvents.ContainsKey(markerEventId))
                 {
                     markerEvents[markerEventId].EventAction = action;
                     return true;

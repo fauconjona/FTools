@@ -14,12 +14,12 @@ namespace FToolsClient.Area
 
         public override void Check()
         {
-            if (PosInsidePoly(Game.PlayerPed.Position) && !this.PlayerInside)
+            if (CoordsInside(Game.PlayerPed.Position) && !this.PlayerInside)
             {
                 this.PlayerInside = true;
                 this.TriggerEnter();
             }
-            else if (!PosInsidePoly(Game.PlayerPed.Position) && this.PlayerInside)
+            else if (!CoordsInside(Game.PlayerPed.Position) && this.PlayerInside)
             {
                 this.PlayerInside = false;
                 this.TriggerExit();
@@ -35,7 +35,7 @@ namespace FToolsClient.Area
             }
         }
 
-        private bool PosInsidePoly(Vector3 pos)
+        public override bool CoordsInside(Vector3 pos)
         {
             bool inside = false;
 

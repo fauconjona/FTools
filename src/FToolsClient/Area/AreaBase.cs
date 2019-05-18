@@ -70,6 +70,7 @@ namespace FToolsClient.Area
             }
         }
 
+        abstract public bool CoordsInside(Vector3 coords);
         abstract public void Check();
         abstract public void Draw();
     }

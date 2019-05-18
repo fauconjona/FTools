@@ -77,5 +77,10 @@ namespace FToolsClient.Area
             end = new Vector3 { X = Pos.X - Radius * angle, Y = Pos.Y - Radius * angle, Z = 200.0f };
             World.DrawLine(start, end, System.Drawing.Color.FromArgb(255, 0, 0));
         }
+
+        public override bool CoordsInside(Vector3 coords)
+        {
+            return Math.Sqrt(coords.DistanceToSquared2D(this.Pos3D)) <= this.Radius;
+        }
     }
 }
