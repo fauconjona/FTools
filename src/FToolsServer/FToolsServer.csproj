@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core">
-      <HintPath>..\..\..\..\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
+    <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.2335\lib\net45\CitizenFX.Core.Server.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,6 +51,9 @@
       <Project>{1c66bba7-e2fe-4d1f-aa6e-88d6bdf6118f}</Project>
       <Name>FToolsShared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

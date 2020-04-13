@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -40,7 +41,7 @@ namespace FToolsClient
                         (MarkerType)type,
                         new Vector3 { X = float.Parse(pos.X.ToString()), Y = float.Parse(pos.Y.ToString()), Z = float.Parse(pos.Z.ToString()) },
                         new Vector3 { X = float.Parse(scale.X.ToString()), Y = float.Parse(scale.Y.ToString()), Z = float.Parse(scale.Z.ToString()) },
-                        System.Drawing.Color.FromArgb(int.Parse(color.R.ToString()), int.Parse(color.G.ToString()), int.Parse(color.B.ToString())),
+                        Color.FromArgb(int.Parse(color.R.ToString()), int.Parse(color.G.ToString()), int.Parse(color.B.ToString())),
                         maxDistance
                     );
             }));
@@ -53,7 +54,7 @@ namespace FToolsClient
                         (MarkerType) type,
                         new Vector3 { X = float.Parse(pos.X.ToString()), Y = float.Parse(pos.Y.ToString()), Z = float.Parse(pos.Z.ToString()) },
                         new Vector3 { X = float.Parse(scale.X.ToString()), Y = float.Parse(scale.Y.ToString()), Z = float.Parse(scale.Z.ToString()) },
-                        System.Drawing.Color.FromArgb(int.Parse(color.R.ToString()), int.Parse(color.G.ToString()), int.Parse(color.B.ToString())),
+                        Color.FromArgb(int.Parse(color.R.ToString()), int.Parse(color.G.ToString()), int.Parse(color.B.ToString())),
                         maxDistance,
                         (bool)bobUpAndDown,
                         (bool)faceCamera,
@@ -77,7 +78,7 @@ namespace FToolsClient
                         new Text3D {
                             TextString = text,
                             Font = (CitizenFX.Core.UI.Font)font,
-                            Color = System.Drawing.Color.FromArgb(int.Parse(textColor.R.ToString()), int.Parse(textColor.G.ToString()), int.Parse(textColor.B.ToString())),
+                            Color = Color.FromArgb(int.Parse(textColor.R.ToString()), int.Parse(textColor.G.ToString()), int.Parse(textColor.B.ToString())),
                             Scale = new Vector2 { X = float.Parse(textScale.X.ToString()), Y = float.Parse(textScale.Y.ToString()) },
                             Pos = new Vector3 { X = float.Parse(textPos.X.ToString()), Y = float.Parse(textPos.Y.ToString()), Z = float.Parse(textPos.Z.ToString()) },
                             MaxDistance = maxDistance
@@ -123,7 +124,7 @@ namespace FToolsClient
                         identifier,
                         text,
                         (CitizenFX.Core.UI.Font)font,
-                        System.Drawing.Color.FromArgb(int.Parse(textColor.R.ToString()), int.Parse(textColor.G.ToString()), int.Parse(textColor.B.ToString())),
+                        Color.FromArgb(int.Parse(textColor.R.ToString()), int.Parse(textColor.G.ToString()), int.Parse(textColor.B.ToString())),
                         new Vector2 { X = float.Parse(textScale.X.ToString()), Y = float.Parse(textScale.Y.ToString()) },
                         new Vector3 { X = float.Parse(textPos.X.ToString()), Y = float.Parse(textPos.Y.ToString()), Z = float.Parse(textPos.Z.ToString()) },
                         maxDistance
@@ -369,7 +370,7 @@ namespace FToolsClient
             pickups.RemoveAll(pick => pick.Deleted || (pick.Created && !pick.Exist));
         }
 
-        private bool CreateText3D(string identifier, string text, CitizenFX.Core.UI.Font font, System.Drawing.Color color, Vector2 scale, Vector3 pos, float maxDistance)
+        private bool CreateText3D(string identifier, string text, CitizenFX.Core.UI.Font font, Color color, Vector2 scale, Vector3 pos, float maxDistance)
         {
             try
             {
@@ -393,7 +394,7 @@ namespace FToolsClient
             }
         }
 
-        private bool CreateMarkerEvent(string identifier, MarkerType type, Vector3 pos, Vector3 scale, System.Drawing.Color color, float maxDistance, bool bobUpAndDown = false, bool faceCamera = false, bool rotate = false)
+        private bool CreateMarkerEvent(string identifier, MarkerType type, Vector3 pos, Vector3 scale, Color color, float maxDistance, bool bobUpAndDown = false, bool faceCamera = false, bool rotate = false)
         {
             try
             {
@@ -587,7 +588,7 @@ namespace FToolsClient
                         (MarkerType)arg2.Type,
                         new Vector3 { X = (float)arg2.Pos.X, Y = (float)arg2.Pos.Y, Z = (float)arg2.Pos.Z },
                         new Vector3 { X = (float)arg2.Scale.X, Y = (float)arg2.Scale.Y, Z = (float)arg2.Scale.Z },
-                        System.Drawing.Color.FromArgb(arg2.Color.R, arg2.Color.G, arg2.Color.B),
+                        Color.FromArgb(arg2.Color.R, arg2.Color.G, arg2.Color.B),
                         (float)arg2.MaxDistance,
                         IsPropertyExist(arg2, "BobUpAndDown") ? (bool)arg2.BobUpAndDown : false,
                         IsPropertyExist(arg2, "FaceCamera") ? (bool)arg2.FaceCamera : false,
@@ -617,7 +618,7 @@ namespace FToolsClient
                     Text3D text = new Text3D {
                         TextString = arg2.Text,
                         Font = (CitizenFX.Core.UI.Font)arg2.Font,
-                        Color = System.Drawing.Color.FromArgb(arg2.Color.R, arg2.Color.G, arg2.Color.B),
+                        Color = Color.FromArgb(arg2.Color.R, arg2.Color.G, arg2.Color.B),
                         Scale = new Vector2 { X = (float)arg2.Scale.X, Y = (float)arg2.Scale.Y },
                         Pos = new Vector3 { X = (float)arg2.Pos.X, Y = (float)arg2.Pos.Y, Z = (float)arg2.Pos.Z },
                         MaxDistance = (float)arg2.MaxDistance
@@ -697,7 +698,7 @@ namespace FToolsClient
                         arg,
                         arg2.Text,
                         (CitizenFX.Core.UI.Font)arg2.Font,
-                        System.Drawing.Color.FromArgb(arg2.Color.R, arg2.Color.G, arg2.Color.B),
+                        Color.FromArgb(arg2.Color.R, arg2.Color.G, arg2.Color.B),
                         new Vector2 { X = (float)arg2.Scale.X, Y = (float)arg2.Scale.Y },
                         new Vector3 { X = (float)arg2.Pos.X, Y = (float)arg2.Pos.Y, Z = (float)arg2.Pos.Z },
                         (float)arg2.MaxDistance
