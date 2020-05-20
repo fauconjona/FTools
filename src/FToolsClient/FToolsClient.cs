@@ -46,8 +46,8 @@ namespace FToolsClient
                     );
             }));
 
-            Exports.Add("CreateMarkerEventExtended", new Func<string, int, dynamic, dynamic, dynamic, float, bool, bool, bool, bool>(
-            (identifier, type, pos, scale, color, maxDistance, bobUpAndDown, faceCamera, rotate) =>
+            Exports.Add("CreateMarkerEventExtended", new Func<string, int, dynamic, dynamic, dynamic, float, bool, bool, bool, bool, bool>(
+            (identifier, type, pos, scale, color, maxDistance, bobUpAndDown, faceCamera, rotate, allowVehicle) =>
             {
                 return CreateMarkerEvent(
                         identifier,
@@ -58,7 +58,8 @@ namespace FToolsClient
                         maxDistance,
                         (bool)bobUpAndDown,
                         (bool)faceCamera,
-                        (bool)rotate
+                        (bool)rotate,
+                        (bool)allowVehicle
                     );
             }));
 
@@ -394,7 +395,7 @@ namespace FToolsClient
             }
         }
 
-        private bool CreateMarkerEvent(string identifier, MarkerType type, Vector3 pos, Vector3 scale, Color color, float maxDistance, bool bobUpAndDown = false, bool faceCamera = false, bool rotate = false)
+        private bool CreateMarkerEvent(string identifier, MarkerType type, Vector3 pos, Vector3 scale, Color color, float maxDistance, bool bobUpAndDown = false, bool faceCamera = false, bool rotate = false, bool allowVehicle = true)
         {
             try
             {
@@ -410,7 +411,8 @@ namespace FToolsClient
                     MaxDistance = maxDistance,
                     BobUpAndDown = bobUpAndDown,
                     FaceCamera = faceCamera,
-                    Rotate = rotate
+                    Rotate = rotate,
+                    AllowInVehicle = allowVehicle
                 });
                 return true;
             }
@@ -592,7 +594,8 @@ namespace FToolsClient
                         (float)arg2.MaxDistance,
                         IsPropertyExist(arg2, "BobUpAndDown") ? (bool)arg2.BobUpAndDown : false,
                         IsPropertyExist(arg2, "FaceCamera") ? (bool)arg2.FaceCamera : false,
-                        IsPropertyExist(arg2, "Rotate") ? (bool)arg2.Rotate : false
+                        IsPropertyExist(arg2, "Rotate") ? (bool)arg2.Rotate : false,
+                        IsPropertyExist(arg2, "AllowVehicle") ? (bool)arg2.AllowVehicle : true
                     );
 
                     if (created)

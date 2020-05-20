@@ -22,7 +22,7 @@ namespace FToolsClient
         {
             get
             {
-                return PickupProp.Handle;
+                return PickupProp;
             }
         }
 
@@ -32,30 +32,29 @@ namespace FToolsClient
         {
             get
             {
-                return PickupProp != null && PickupProp.Exists();
+                return PickupProp != -1 && API.DoesEntityExist(Handle);
             }
         }
 
         public bool Created { get; set; } = false;
         public bool Deleted { get; set; } = false;
 
-        private Prop PickupProp = null;
+        private Int32 PickupProp = -1;
 
         public static CustomPickup FromInfo(CustomPickupInfo info)
         {
             int handle = API.NetworkGetEntityFromNetworkId(info.NetHandle);
-            Prop prop = new Prop(handle);
-            if (prop == null)
+            if (!API.DoesEntityExist(handle))
             {
                 return null;
             }
 
             CustomPickup pickup = new CustomPickup
             {
-                PickupProp = prop,
-                NetHandle = API.ObjToNet(prop.Handle),
-                Pos = prop.Position,
-                Model = prop.Model,
+                PickupProp = handle,
+                NetHandle = API.ObjToNet(handle),
+                Pos = API.GetEntityCoords(handle, false),
+                Model = API.GetEntityModel(handle),
                 Dynamic = info.Dynamic,
                 OnGround = info.OnGround,
                 DeleteOnAction = info.DeleteOnAction,
@@ -81,12 +80,16 @@ namespace FToolsClient
                 {
                     await Model.Request(5000);
                 }
-
-                PickupProp = await World.CreateProp(Model, Pos, Dynamic, OnGround);
+                PickupProp = API.CreateObject(Model.Hash, Pos.X, Pos.Y, Pos.Z, true, true, Dynamic);
                 await BaseScript.Delay(100);
-                API.SetEntityAsMissionEntity(PickupProp.Handle, false, false);
+                API.SetEntityAsMissionEntity(PickupProp, false, false);
 
-                NetHandle = API.ObjToNet(PickupProp.Handle);
+                if (OnGround)
+                {
+                    API.PlaceObjectOnGroundProperly(PickupProp);
+                }
+
+                NetHandle = API.ObjToNet(PickupProp);
 
                 API.SetNetworkIdCanMigrate(NetHandle, true);
                 API.SetNetworkIdExistsOnAllMachines(NetHandle, false);
@@ -117,18 +120,9 @@ namespace FToolsClient
             BaseScript.TriggerServerEvent("FTools:PickupDeleted", NetHandle);
         }
 
-        public void Load(int handle)
-        {
-            PickupProp = new Prop(handle);
-            Pos = PickupProp.Position;
-            Model = PickupProp.Model;
-            Dynamic = !PickupProp.IsPositionFrozen;
-            OnGround = Dynamic;
-        }
-
         public void Check()
         {
-            if (EventAction != null && PickupProp != null && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(PickupProp.Position)) < 1.5)
+            if (EventAction != null && Exist && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(API.GetEntityCoords(PickupProp, false))) < 1.5)
             {
                 EventAction.Draw();
                 if (EventAction.CheckPickupControl(NetHandle) && DeleteOnAction)

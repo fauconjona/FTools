@@ -24,6 +24,7 @@ namespace FToolsClient
         public bool FaceCamera { get; set; } = false;
         public bool Rotate { get; set; } = false;
         public float MaxDistance { get; set; } = 50.0f;
+        public bool AllowInVehicle { get; set; } = true;   
 
         #endregion
 
@@ -33,12 +34,13 @@ namespace FToolsClient
 
         public void Draw()
         {
-            if (Math.Sqrt(GameplayCamera.Position.DistanceToSquared(this.Pos)) <= this.MaxDistance)
+            double distance = Math.Sqrt(GameplayCamera.Position.DistanceToSquared(this.Pos));
+            if (distance <= this.MaxDistance && (AllowInVehicle || !Game.PlayerPed.IsInVehicle()))
             {
                 World.DrawMarker(this.Type, this.Pos, this.Dir, this.Rot, this.Scale, this.Color, this.BobUpAndDown, this.FaceCamera, this.Rotate);
             }
             
-            if (this.Text3D != null)
+            if (this.Text3D != null && distance <= this.MaxDistance && (AllowInVehicle || !Game.PlayerPed.IsInVehicle()))
             {
                 this.Text3D.Draw(this.Pos);
             }           
@@ -47,7 +49,7 @@ namespace FToolsClient
 
         public void Check()
         {
-            if (this.EventAction != null && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(this.Pos)) <= this.Scale.X)
+            if (this.EventAction != null && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(this.Pos)) <= this.Scale.X && (AllowInVehicle || !Game.PlayerPed.IsInVehicle()))
             {                
                 this.EventAction.Draw();
                 this.EventAction.CheckControl();
