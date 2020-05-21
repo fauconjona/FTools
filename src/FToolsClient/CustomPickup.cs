@@ -120,7 +120,7 @@ namespace FToolsClient
             BaseScript.TriggerServerEvent("FTools:PickupDeleted", NetHandle);
         }
 
-        public void Check()
+        public bool Check()
         {
             if (EventAction != null && Exist && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(API.GetEntityCoords(PickupProp, false))) < 1.5)
             {
@@ -129,7 +129,9 @@ namespace FToolsClient
                 {
                     Delete();
                 }
+                return true;
             }
+            return false;
         }
 
         public CustomPickupInfo GetInfo()

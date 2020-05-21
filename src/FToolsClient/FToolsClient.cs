@@ -334,7 +334,10 @@ namespace FToolsClient
             {
                 if (pick.EventAction != null && pick.EventAction.Type == EventActionType.PressControl)
                 {
-                    pick.Check();
+                    if (pick.Check())
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -359,7 +362,10 @@ namespace FToolsClient
             {
                 if (pick.EventAction == null || pick.EventAction.Type != EventActionType.PressControl)
                 {
-                    pick.Check();
+                    if (pick.Check())
+                    {
+                        break;
+                    }
                 }
             }
         }
