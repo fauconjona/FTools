@@ -24,7 +24,7 @@ namespace FToolsClient
         public bool FaceCamera { get; set; } = false;
         public bool Rotate { get; set; } = false;
         public float MaxDistance { get; set; } = 50.0f;
-        public bool AllowInVehicle { get; set; } = true;   
+        public int Accessibility { get; set; } = 0;   
 
         #endregion
 
@@ -32,15 +32,20 @@ namespace FToolsClient
 
         public EventAction EventAction { get; set; } = null;
 
+        private bool CanAccess()
+        {
+            return Accessibility == 0 || (Accessibility == 1 && !Game.PlayerPed.IsInVehicle()) || (Accessibility == 2 && Game.PlayerPed.IsInVehicle());
+        }
+
         public void Draw()
         {
             double distance = Math.Sqrt(GameplayCamera.Position.DistanceToSquared(this.Pos));
-            if (distance <= this.MaxDistance && (AllowInVehicle || !Game.PlayerPed.IsInVehicle()))
+            if (distance <= this.MaxDistance && CanAccess())
             {
                 World.DrawMarker(this.Type, this.Pos, this.Dir, this.Rot, this.Scale, this.Color, this.BobUpAndDown, this.FaceCamera, this.Rotate);
             }
             
-            if (this.Text3D != null && distance <= this.MaxDistance && (AllowInVehicle || !Game.PlayerPed.IsInVehicle()))
+            if (this.Text3D != null && distance <= this.MaxDistance && CanAccess())
             {
                 this.Text3D.Draw(this.Pos);
             }           
@@ -49,7 +54,7 @@ namespace FToolsClient
 
         public void Check()
         {
-            if (this.EventAction != null && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(this.Pos)) <= this.Scale.X && (AllowInVehicle || !Game.PlayerPed.IsInVehicle()))
+            if (this.EventAction != null && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(this.Pos)) <= this.Scale.X && CanAccess())
             {                
                 this.EventAction.Draw();
                 this.EventAction.CheckControl();
