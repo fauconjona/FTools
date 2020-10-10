@@ -72,8 +72,6 @@ namespace FToolsClient
 
         public void TriggerAction()
         {
-            
-
             if (this.Callback.GetType() == typeof(System.String))
             {
                 BaseScript.TriggerEvent((String)this.Callback, this.Params);

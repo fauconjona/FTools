@@ -24,7 +24,10 @@ namespace FToolsClient
         public bool FaceCamera { get; set; } = false;
         public bool Rotate { get; set; } = false;
         public float MaxDistance { get; set; } = 50.0f;
-        public int Accessibility { get; set; } = 0;   
+        public int Accessibility { get; set; } = 0;
+        public dynamic OnEnterAction { get; set; }
+        public dynamic OnExitAction { get; set; }
+        private bool Inside { get; set; } = false;
 
         #endregion
 
@@ -58,9 +61,54 @@ namespace FToolsClient
             {                
                 this.EventAction.Draw();
                 this.EventAction.CheckControl();
+
+                if (!this.Inside)
+                {
+                    this.Inside = true;
+                    this.CallOnEnterAction();
+                }
+            }
+            else if(this.Inside)
+            {
+                this.Inside = false;
+                this.CallOnExitAction();
             }
         }
-        
-        
+
+        private void CallOnEnterAction()
+        {
+            if (this.OnEnterAction == null)
+            {
+                return;
+            }
+
+            if (this.OnEnterAction.GetType() == typeof(System.String))
+            {
+                BaseScript.TriggerEvent((String)this.OnEnterAction, this.Identifier);
+            }
+            else if (this.OnEnterAction.GetType() == typeof(CitizenFX.Core.CallbackDelegate))
+            {
+                ((CallbackDelegate)this.OnEnterAction).Invoke(this.Identifier);                
+            }
+        }
+
+        private void CallOnExitAction()
+        {
+            if (this.OnExitAction == null)
+            {
+                return;
+            }
+
+            if (this.OnExitAction.GetType() == typeof(System.String))
+            {
+                BaseScript.TriggerEvent((String)this.OnExitAction, this.Identifier);
+            }
+            else if (this.OnExitAction.GetType() == typeof(CitizenFX.Core.CallbackDelegate))
+            {
+                ((CallbackDelegate)this.OnExitAction).Invoke(this.Identifier);
+            }
+        }
+
+
     }
 }
