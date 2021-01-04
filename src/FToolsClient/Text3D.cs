@@ -16,11 +16,13 @@ namespace FToolsClient
         public System.Drawing.Color Color { get; set; } = System.Drawing.Color.Empty;
         public Vector2 Scale { get; set; } = new Vector2 { X = 0, Y = 0 };
         public Vector3 Pos { get; set; } = new Vector3 { X = 0, Y = 0, Z = 0 };
+        public Entity Entity { get; set; } = null;
         public float MaxDistance { get; set; } = 20.0f;
 
         public void Draw()
         {
-            float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(this.Pos));
+            Vector3 position = GetPosition();
+            float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(position));
             float _2dScale = ((1 / distance) * 2) * GameplayCamera.FieldOfView / 20.0f;
 
             if (distance > this.MaxDistance)
@@ -38,7 +40,7 @@ namespace FToolsClient
             API.SetTextDropShadow();
             API.SetTextOutline();
 
-            API.SetDrawOrigin(this.Pos.X, this.Pos.Y, this.Pos.Z, 0);
+            API.SetDrawOrigin(position.X, position.Y, position.Z, 0);
 
             API.SetTextEntry("STRING");
             API.SetTextCentre(true);
@@ -46,9 +48,11 @@ namespace FToolsClient
             API.EndTextCommandDisplayText(0, 0);
             API.ClearDrawOrigin();            
         }
+
         public void Draw(Vector3 relativePos)
         {
-            float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(new Vector3 { X = relativePos.X + this.Pos.X, Y = relativePos.Y + this.Pos.Y, Z = relativePos.Z + this.Pos.Z }));
+            Vector3 position = GetPosition();
+            float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(new Vector3 { X = relativePos.X + position.X, Y = relativePos.Y + position.Y, Z = relativePos.Z + position.Z }));
             float _2dScale = ((1 / distance) * 2) * GameplayCamera.FieldOfView / 20.0f;
 
             if (distance > this.MaxDistance)
@@ -66,13 +70,26 @@ namespace FToolsClient
             API.SetTextDropShadow();
             API.SetTextOutline();
 
-            API.SetDrawOrigin(relativePos.X + this.Pos.X, relativePos.Y + this.Pos.Y, relativePos.Z + this.Pos.Z, 0);
+            API.SetDrawOrigin(relativePos.X + position.X, relativePos.Y + position.Y, relativePos.Z + position.Z, 0);
 
             API.SetTextEntry("STRING");
             API.SetTextCentre(true);
             API.AddTextComponentString(this.TextString);
             API.EndTextCommandDisplayText(0, 0);
             API.ClearDrawOrigin();
+        }
+
+        public Vector3 GetPosition()
+        {
+            if (this.Entity != null && this.Entity.Exists())
+            {
+                // this.Pos is the offset
+                return this.Entity.Position + this.Pos;
+            }
+            else
+            {
+                return this.Pos;
+            }
         }
     }
 }

@@ -134,7 +134,22 @@ namespace FToolsClient
                     );
             }));
 
-            Exports.Add("DeleteText3d", new Action<string>(
+            Exports.Add("CreateText3DOnEntity", new Func<string, string, int, dynamic, dynamic, dynamic, float, int, bool>(
+            (identifier, text, font, textColor, textScale, textPos, maxDistance, entity) =>
+            {
+                return CreateText3D(
+                        identifier,
+                        text,
+                        (CitizenFX.Core.UI.Font)font,
+                        Color.FromArgb(int.Parse(textColor.R.ToString()), int.Parse(textColor.G.ToString()), int.Parse(textColor.B.ToString())),
+                        new Vector2 { X = float.Parse(textScale.X.ToString()), Y = float.Parse(textScale.Y.ToString()) },
+                        new Vector3 { X = float.Parse(textPos.X.ToString()), Y = float.Parse(textPos.Y.ToString()), Z = float.Parse(textPos.Z.ToString()) },
+                        maxDistance,
+                        entity
+                    );
+            }));
+
+            Exports.Add("DeleteText3D", new Action<string>(
             (identifier) =>
             {
                 if (identifier != null && texts.ContainsKey(identifier))
@@ -379,20 +394,22 @@ namespace FToolsClient
             pickups.RemoveAll(pick => pick.Deleted || (pick.Created && !pick.Exist));
         }
 
-        private bool CreateText3D(string identifier, string text, CitizenFX.Core.UI.Font font, Color color, Vector2 scale, Vector3 pos, float maxDistance)
+        private bool CreateText3D(string identifier, string text, CitizenFX.Core.UI.Font font, Color color, Vector2 scale, Vector3 pos, float maxDistance, int entity = -1)
         {
             try
             {
                 if (identifier == null || texts.ContainsKey(identifier))
                     return false;
 
-                texts.Add(identifier, new Text3D {
+                texts.Add(identifier, new Text3D
+                {
                     TextString = text,
                     Font = font,
                     Color = color,
                     Scale = scale,
                     Pos = pos,
-                    MaxDistance = maxDistance
+                    MaxDistance = maxDistance,
+                    Entity = entity != -1 ? Entity.FromHandle(entity) : null
                 });
                 return true;
             }
