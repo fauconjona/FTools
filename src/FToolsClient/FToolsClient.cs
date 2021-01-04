@@ -336,9 +336,26 @@ namespace FToolsClient
                 }
             }
 
-            foreach (Text3D text in texts.Values.ToList())
+            List<string> textToDelete = new List<string>();
+
+            foreach (KeyValuePair<string, Text3D> pair in texts)
             {
-                text.Draw();
+                string identifier = pair.Key;
+                Text3D text = pair.Value; 
+                if (text.Entity == null || (text.Entity != null && text.EntityExist()))
+                {
+                    text.Draw();
+                }
+                else
+                {
+                    //Entity doesn't exist, clearing...
+                    textToDelete.Add(identifier);
+                }
+            }
+
+            foreach(string identifier in textToDelete)
+            {
+                texts.Remove(identifier);
             }
 
             foreach (AreaBase area in areas.Values.ToList())

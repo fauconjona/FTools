@@ -79,9 +79,14 @@ namespace FToolsClient
             API.ClearDrawOrigin();
         }
 
+        public bool EntityExist()
+        {
+            return this.Entity.Exists();
+        }
+
         public Vector3 GetPosition()
         {
-            if (this.Entity != null && this.Entity.Exists())
+            if (this.Entity != null && this.EntityExist())
             {
                 // this.Pos is the offset
                 return this.Entity.Position + this.Pos;
