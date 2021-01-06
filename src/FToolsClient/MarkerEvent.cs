@@ -57,10 +57,13 @@ namespace FToolsClient
 
         public void Check()
         {
-            if (this.EventAction != null && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(this.Pos)) <= this.Scale.X && CanAccess())
-            {                
-                this.EventAction.Draw();
-                this.EventAction.CheckControl();
+            if (this.HasEvent() && Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(this.Pos)) <= this.Scale.X && CanAccess())
+            {            
+                if (this.EventAction != null)
+                {
+                    this.EventAction.Draw();
+                    this.EventAction.CheckControl();
+                }
 
                 if (!this.Inside)
                 {
@@ -109,6 +112,9 @@ namespace FToolsClient
             }
         }
 
-
+        private bool HasEvent()
+        {
+            return this.EventAction != null || this.OnEnterAction != null || this.OnExitAction != null;
+        }
     }
 }
