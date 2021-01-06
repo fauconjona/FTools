@@ -81,26 +81,23 @@ namespace FToolsClient
                     await Model.Request(5000);
                 }
                 PickupProp = API.CreateObject(Model.Hash, Pos.X, Pos.Y, Pos.Z, true, true, Dynamic);
+                NetHandle = API.ObjToNet(PickupProp);
                 await BaseScript.Delay(100);
                 API.SetEntityAsMissionEntity(PickupProp, false, false);
 
                 if (OnGround)
                 {
                     API.PlaceObjectOnGroundProperly(PickupProp);
-                }
-
-                NetHandle = API.ObjToNet(PickupProp);
+                }                
 
                 API.SetNetworkIdCanMigrate(NetHandle, true);
-                API.SetNetworkIdExistsOnAllMachines(NetHandle, false);
+                API.SetNetworkIdExistsOnAllMachines(NetHandle, false);                
 
-                int maxPlayers = Int32.Parse(API.GetResourceMetadata(API.GetCurrentResourceName(), "max_clients", 0));
-               
-                for (var i = 0; i < maxPlayers; i++)
+                foreach (int playerId in API.GetActivePlayers())
                 {
-                    if (API.NetworkIsPlayerActive(i))
+                    if (API.NetworkIsPlayerActive(playerId))
                     {
-                        API.SetNetworkIdSyncToPlayer(NetHandle, i, false);
+                        API.SetNetworkIdSyncToPlayer(NetHandle, playerId, false);
                     }
                 }
 
